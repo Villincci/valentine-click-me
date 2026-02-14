@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>💖 Click Me</title>
+
+<style>
+:root{
+  --bg1:#ffe6f2;
+  --bg2:#fff7fb;
+  --yes:#ff4d88;
+  --no:#666;
+}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.card{
+  width:min(92vw,520px);
+  background:#ffffffcc;
+  backdrop-filter:blur(8px);
+  border-radius:20px;
+  padding:22px 18px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.1);
+}
+
+h1{margin:6px 0 10px}
+p{margin:10px 0 16px}
+
+.media{
+  width:100%;
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:12px;
+}
+.media img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+
+.btnrow{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+button{
+  border:0;
+  padding:12px 18px;
+  border-radius:999px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:16px;
+  transition:transform .25s ease;
+}
+
+.primary{background:var(--yes);color:#fff;}
+.ghost{background:#fff;color:var(--no);border:1px solid #ddd;}
+
+.hearts{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.heart{
+  position:absolute;
+  font-size:18px;
+  animation:floatUp 2.6s linear forwards;
+}
+@keyframes floatUp{
+  from{transform:translateY(0);opacity:1}
+  to{transform:translateY(-220px);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1 id="title"></h1>
+
+  <div class="media" id="media" style="display:none;">
+    <img id="mediaImg">
+  </div>
+
+  <p id="msg"></p>
+
+  <div class="btnrow" id="btnrow"></div>
+</div>
+
+<script>
+// ===== CUSTOMIZE =====
+const WIFE_NAME="My Love";
+const YOUR_NAME="Tyler";
+
+const screens=[
+{
+ title:`Hey ${WIFE_NAME} 💗`,
+ img:"pics/1.jpg",
+ msg:"I have a very important question for you…",
+ buttons:[{id:"next",text:"Next ➜",type:"primary"}]
+},
+{
+ title:"Before that… 😌",
+ img:"pics/2.jpg",
+ msg:"Do you know you’re my favorite person in the whole world?",
+ buttons:[{id:"next",text:"Next ➜",type:"primary"}]
+},
+{
+ title:"Ok here it comes… 🥺",
+ img:"pics/3.jpg",
+ msg:"Will you be my Valentine?",
+ buttons:[
+   {id:"yes",text:"YES 💖",type:"primary"},
+   {id:"no",text:"No 🙃",type:"ghost"}
+ ]
+},
+{
+ title:"YAYYYYY!!! 🎉💞",
+ img:"pics/4.jpg",
+ msg:`I love you so much ❤️ — ${YOUR_NAME}`,
+ buttons:[{id:"hearts",text:"Spam hearts 💘",type:"primary"}]
+}
+];
+// =====================
+
+let idx=0;
+let yesScale=1;
+
+const titleEl=document.getElementById("title");
+const msgEl=document.getElementById("msg");
+const btnrow=document.getElementById("btnrow");
+const mediaBox=document.getElementById("media");
+const mediaImg=document.getElementById("mediaImg");
+
+function render(){
+ const s=screens[idx];
+
+ titleEl.textContent=s.title;
+ msgEl.textContent=s.msg;
+
+ if(s.img){
+   mediaImg.src=s.img;
+   mediaBox.style.display="block";
+ }else{
+   mediaBox.style.display="none";
+ }
+
+ btnrow.innerHTML="";
+
+ s.buttons.forEach(b=>{
+   const btn=document.createElement("button");
+   btn.textContent=b.text;
+   btn.className=b.type==="primary"?"primary":"ghost";
+
+   if(b.id==="yes"){
+     btn.id="yesBtn";
+     btn.style.transform=`scale(${yesScale})`;
+   }
+
+   btn.onclick=()=>handleClick(b.id);
+   btnrow.appendChild(btn);
+ });
+}
+
+function handleClick(id){
+
+ if(id==="next"){
+   idx++;
+   render();
+ }
+
+ else if(id==="yes"){
+   idx=3;
+   render();
+   popHearts(30);
+ }
+
+ else if(id==="no"){
+   // Grow YES exponentially
+   yesScale*=1.35;
+
+   const yesBtn=document.getElementById("yesBtn");
+   yesBtn.style.transform=`scale(${yesScale})`;
+
+   popHearts(8);
+ }
+
+ else if(id==="hearts"){
+   popHearts(40);
+ }
+}
+
+function popHearts(count){
+ const emojis=["💖","💘","💝","💗","💓","💕","💞"];
+ for(let i=0;i<count;i++){
+   const span=document.createElement("span");
+   span.className="heart";
+   span.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+   span.style.left=Math.random()*100+"%";
+   span.style.bottom="10px";
+   document.body.appendChild(span);
+   setTimeout(()=>span.remove(),2600);
+ }
+}
+
+render();
+</script>
+
+</body>
+</html>
