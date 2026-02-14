@@ -12,6 +12,7 @@
   --yes:#ff4d88;
   --no:#666;
 }
+
 *{box-sizing:border-box}
 
 body{
@@ -69,16 +70,12 @@ button{
 .primary{background:var(--yes);color:#fff;}
 .ghost{background:#fff;color:var(--no);border:1px solid #ddd;}
 
-.hearts{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-}
 .heart{
-  position:absolute;
+  position:fixed;
   font-size:18px;
   animation:floatUp 2.6s linear forwards;
 }
+
 @keyframes floatUp{
   from{transform:translateY(0);opacity:1}
   to{transform:translateY(-220px);opacity:0}
@@ -101,6 +98,7 @@ button{
 </div>
 
 <script>
+
 // ===== CUSTOMIZE =====
 const WIFE_NAME="My Love";
 const YOUR_NAME="Tyler";
@@ -108,19 +106,19 @@ const YOUR_NAME="Tyler";
 const screens=[
 {
  title:`Hey ${WIFE_NAME} 💗`,
- img:"pics/1.jpg",
+ img:"New folder/1.jpeg",
  msg:"I have a very important question for you…",
  buttons:[{id:"next",text:"Next ➜",type:"primary"}]
 },
 {
  title:"Before that… 😌",
- img:"pics/2.jpg",
+ img:"New folder/2.jpeg",
  msg:"Do you know you’re my favorite person in the whole world?",
  buttons:[{id:"next",text:"Next ➜",type:"primary"}]
 },
 {
  title:"Ok here it comes… 🥺",
- img:"pics/3.jpg",
+ img:"New folder/3.jpeg",
  msg:"Will you be my Valentine?",
  buttons:[
    {id:"yes",text:"YES 💖",type:"primary"},
@@ -129,7 +127,7 @@ const screens=[
 },
 {
  title:"YAYYYYY!!! 🎉💞",
- img:"pics/4.jpg",
+ img:"New folder/1.jpeg",
  msg:`I love you so much ❤️ — ${YOUR_NAME}`,
  buttons:[{id:"hearts",text:"Spam hearts 💘",type:"primary"}]
 }
@@ -189,12 +187,9 @@ function handleClick(id){
  }
 
  else if(id==="no"){
-   // Grow YES exponentially
    yesScale*=1.35;
-
    const yesBtn=document.getElementById("yesBtn");
    yesBtn.style.transform=`scale(${yesScale})`;
-
    popHearts(8);
  }
 
@@ -209,14 +204,15 @@ function popHearts(count){
    const span=document.createElement("span");
    span.className="heart";
    span.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-   span.style.left=Math.random()*100+"%";
-   span.style.bottom="10px";
+   span.style.left=Math.random()*100+"vw";
+   span.style.bottom="0px";
    document.body.appendChild(span);
    setTimeout(()=>span.remove(),2600);
  }
 }
 
 render();
+
 </script>
 
 </body>
